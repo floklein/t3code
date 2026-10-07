@@ -536,7 +536,8 @@ describe("nativeMarkdownDocumentRuns", () => {
     });
   });
 
-  it("decorates a skill mention linked to its SKILL.md as the skill", () => {
+  it("chips a linked skill mention as the linked file's skill and copies the link", () => {
+    const path = "/Users/me/.agents/skills/ui/SKILL.md";
     const node: MarkdownNode = {
       type: "document",
       children: [
@@ -544,22 +545,33 @@ describe("nativeMarkdownDocumentRuns", () => {
           type: "paragraph",
           children: [
             { type: "text", content: "Use " },
-            {
-              type: "link",
-              href: "/Users/me/.agents/skills/ui/SKILL.md",
-              children: [{ type: "text", content: "$ui" }],
-            },
+            { type: "link", href: path, children: [{ type: "text", content: "$ui" }] },
             { type: "text", content: " for this." },
           ],
         },
       ],
     };
 
-    expect(nativeMarkdownDocumentRuns(node, [{ name: "ui", displayName: "UI" }])).toEqual([
+    const runs = nativeMarkdownDocumentRuns(node, [
+      { name: "ui", displayName: "UI (Codex)", path: "/Users/me/.codex/skills/ui/SKILL.md" },
+      { name: "ui", displayName: "UI", path },
+    ]);
+    expect(runs).toEqual([
       { text: "Use ", role: "body" },
-      { text: "$ui", role: "body", skillName: "ui", skillLabel: "UI" },
+      {
+        text: "$ui",
+        role: "body",
+        skillName: "ui",
+        skillLabel: "UI",
+        sourceText: `[$ui](${path})`,
+      },
       { text: " for this.", role: "body" },
     ]);
+    expect(
+      nativeMarkdownContextCopyRanges(
+        runs.map((run) => ({ run, text: run.text, inlineImageLength: 0 })),
+      ),
+    ).toEqual([{ start: 4, end: 7, text: `[$ui](${path})` }]);
   });
 
   it("leaves unknown skill-like text unchanged", () => {
