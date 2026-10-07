@@ -529,6 +529,17 @@ function appendNode(
         runs.push(...referenceRuns);
         return runs;
       }
+      // A linked skill mention, `[$name](…/SKILL.md)`, reads as its `$name`,
+      // which decorateSkillRuns then chips like any other skill mention.
+      const label = nodeTextContent(node);
+      const linkedSkill = collectComposerInlineTokens(`[${label}](${node.href ?? ""}) `)[0];
+      if (
+        linkedSkill?.type === "skill" &&
+        linkedSkill.path !== undefined &&
+        linkedSkill.start === 0
+      ) {
+        return appendRun(runs, label, context);
+      }
       const presentation = resolveMarkdownLinkPresentation(node.href ?? "");
       if (presentation.kind === "file") {
         const label = textNodeContent(nodeTextContent(node));

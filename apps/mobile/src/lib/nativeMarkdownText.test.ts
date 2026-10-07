@@ -536,6 +536,32 @@ describe("nativeMarkdownDocumentRuns", () => {
     });
   });
 
+  it("decorates a skill mention linked to its SKILL.md as the skill", () => {
+    const node: MarkdownNode = {
+      type: "document",
+      children: [
+        {
+          type: "paragraph",
+          children: [
+            { type: "text", content: "Use " },
+            {
+              type: "link",
+              href: "/Users/me/.agents/skills/ui/SKILL.md",
+              children: [{ type: "text", content: "$ui" }],
+            },
+            { type: "text", content: " for this." },
+          ],
+        },
+      ],
+    };
+
+    expect(nativeMarkdownDocumentRuns(node, [{ name: "ui", displayName: "UI" }])).toEqual([
+      { text: "Use ", role: "body" },
+      { text: "$ui", role: "body", skillName: "ui", skillLabel: "UI" },
+      { text: " for this.", role: "body" },
+    ]);
+  });
+
   it("leaves unknown skill-like text unchanged", () => {
     const node: MarkdownNode = {
       type: "document",
