@@ -15,7 +15,7 @@ export type ComposerControlSize = "sm" | "xs";
 export const composerContextPillClassName = [
   "in-data-[slot=composer-context-strip]:bg-background/(--glass-opacity) in-data-[slot=composer-context-strip]:backdrop-blur-(--glass-blur) in-data-[slot=composer-context-strip]:backdrop-saturate-(--glass-saturation)",
   "in-data-[slot=composer-context-strip]:hover:bg-background/(--glass-opacity) in-data-[slot=composer-context-strip]:hover:bg-linear-to-r in-data-[slot=composer-context-strip]:hover:from-accent in-data-[slot=composer-context-strip]:hover:to-accent",
-  "not-supports-[((backdrop-filter:blur(1px))_or_(-webkit-backdrop-filter:blur(1px)))]:in-data-[slot=composer-context-strip]:bg-background not-supports-[((backdrop-filter:blur(1px))_or_(-webkit-backdrop-filter:blur(1px)))]:in-data-[slot=composer-context-strip]:hover:bg-background",
+  "not-supports-[((backdrop-filter:blur(1px))_or_(-webkit-backdrop-filter:blur(1px)))]:in-data-[slot=composer-context-strip]:bg-background not-supports-[((backdrop-filter:blur(1px))_or_(-webkit-backdrop-filter:blur(1px)))]:in-data-[slot=composer-context-strip]:hover:bg-background not-supports-[((backdrop-filter:blur(1px))_or_(-webkit-backdrop-filter:blur(1px)))]:in-data-[slot=composer-context-strip]:hover:bg-none",
 ].join(" ");
 
 function composerControlClassName(size: ComposerControlSize, className?: string) {
