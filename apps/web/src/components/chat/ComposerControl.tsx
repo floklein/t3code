@@ -9,11 +9,14 @@ export type ComposerControlSize = "sm" | "xs";
 
 /**
  * The context row sits over the scrolling timeline with no surface of its own, so each control
- * carries the page background to stay legible. `--accent` is translucent in some themes, so the
- * hover state layers it over that background instead of replacing it.
+ * carries the app's glass over the page background to stay legible. `--accent` is translucent in
+ * some themes, so the hover state layers it over the glass instead of replacing it.
  */
-export const composerContextPillClassName =
-  "in-data-[slot=composer-context-strip]:bg-background in-data-[slot=composer-context-strip]:hover:bg-background in-data-[slot=composer-context-strip]:hover:bg-linear-to-r in-data-[slot=composer-context-strip]:hover:from-accent in-data-[slot=composer-context-strip]:hover:to-accent";
+export const composerContextPillClassName = [
+  "in-data-[slot=composer-context-strip]:bg-background/(--glass-opacity) in-data-[slot=composer-context-strip]:backdrop-blur-(--glass-blur) in-data-[slot=composer-context-strip]:backdrop-saturate-(--glass-saturation)",
+  "in-data-[slot=composer-context-strip]:hover:bg-background/(--glass-opacity) in-data-[slot=composer-context-strip]:hover:bg-linear-to-r in-data-[slot=composer-context-strip]:hover:from-accent in-data-[slot=composer-context-strip]:hover:to-accent",
+  "not-supports-[((backdrop-filter:blur(1px))_or_(-webkit-backdrop-filter:blur(1px)))]:in-data-[slot=composer-context-strip]:bg-background not-supports-[((backdrop-filter:blur(1px))_or_(-webkit-backdrop-filter:blur(1px)))]:in-data-[slot=composer-context-strip]:hover:bg-background",
+].join(" ");
 
 function composerControlClassName(size: ComposerControlSize, className?: string) {
   return cn(
